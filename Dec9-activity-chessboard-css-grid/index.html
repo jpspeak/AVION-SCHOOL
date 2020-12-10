@@ -77,7 +77,7 @@
     }
     .main-grid {
       display: grid;
-      grid-template-columns: 1fr 4fr 1fr;
+      grid-template-columns: 1fr 2fr 1fr;
       /* grid-template-rows: 1fr auto 1fr; */
       height: 100%;
       padding: 10px;
@@ -95,10 +95,17 @@
       min-height: 100px;
       width: 100%;
       padding: 4px;
+      font-weight: bold;
+      /* display: flex; */
+
+      color: gray;
     }
     .trash > img {
       height: auto;
       width: 50px;
+    }
+    .trash span {
+      z-index: -1;
     }
     @media only screen and (max-width: 576px) {
       .main-grid {
@@ -124,7 +131,7 @@
       }
       .trash > img {
         height: auto;
-        width: 10vw;
+        width: 6vw;
       }
     }
   </style>
@@ -468,9 +475,12 @@
             </div>
           </div>
         </div>
-        <div class="main-grid-right"><div class="trash"></div></div>
+        <div class="main-grid-right">
+          <div class="trash"></div>
+        </div>
       </div>
     </main>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script>
       function addDragListenerToImage() {
         for (const draggableElement of document.querySelectorAll("img")) {
@@ -485,6 +495,18 @@
             e.preventDefault();
           });
           dropArea.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const droppedElementId = e.dataTransfer.getData("text/plain");
+            const droppedElement = document.getElementById(droppedElementId);
+
+            if (e.target.nodeName !== "IMG") {
+              dropArea.appendChild(droppedElement);
+            }
+          });
+          dropArea.addEventListener("touchmove", (e) => {
+            e.preventDefault();
+          });
+          dropArea.addEventListener("touchleave", (e) => {
             e.preventDefault();
             const droppedElementId = e.dataTransfer.getData("text/plain");
             const droppedElement = document.getElementById(droppedElementId);
@@ -514,6 +536,12 @@
       addDragListenerToImage();
       addDropListenerToEmptyGrid();
       addDropListenerToTrash();
+
+      swal({
+        title: "Play chess! 🧠",
+        text: "Just drag and drop! 🤩",
+        button: "Play now!",
+      });
     </script>
   </body>
 </html>
